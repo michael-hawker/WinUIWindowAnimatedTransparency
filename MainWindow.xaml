@@ -19,7 +19,9 @@
         <Image Source="/Assets/annie-spratt-x-cEGE4dw8Q-unsplash.jpg" MaxWidth="640" />
         <Border Width="480" Height="240" HorizontalAlignment="Left">
             <Border.Background>
-                <media:AcrylicBrush BlurAmount="15" TintColor="Black" TintOpacity="0.6"/>
+                <!-- Need to set the FallbackColor on the brush for this to work with transparent window (Note: Not sure of actual proper brush to use here, just example) -->
+                <media:AcrylicBrush BlurAmount="15" TintColor="Black" TintOpacity="0.6"
+                                    FallbackColor="{ThemeResource ControlFillColorDefault}"/>
             </Border.Background>
         </Border>
     </Grid>
