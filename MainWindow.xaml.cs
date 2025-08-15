@@ -14,5 +14,6 @@ public sealed partial class MainWindow : WinUIEx.WindowEx
 
         var hwnd = this.GetWindowHandle();
         HwndExtensions.ToggleWindowStyle(hwnd, false, WindowStyle.TiledWindow);
+        HwndExtensions.CenterOnScreen(hwnd, 1024, 768);
     }
 }

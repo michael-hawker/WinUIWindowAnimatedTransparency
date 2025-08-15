@@ -15,6 +15,6 @@
     </winex:WindowEx.SystemBackdrop>
 
     <Grid>
-
+        <Image Source="/Assets/annie-spratt-x-cEGE4dw8Q-unsplash.jpg" />
     </Grid>
 </winex:WindowEx>
