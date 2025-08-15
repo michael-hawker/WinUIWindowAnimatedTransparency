@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winex="using:WinUIEx"
-    xmlns:media="using:CommunityToolkit.WinUI.Media"
+    xmlns:media="using:CommunityToolkit.WinUI.Media" xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d"
     Title="WinUIExTransparent">
 
@@ -15,14 +15,34 @@
         <winex:TransparentTintBackdrop />
     </winex:WindowEx.SystemBackdrop>
 
+    <!-- Grid represents the main transparent area of the desktop behind us -->
+    <!-- See Window width/height constants in App.xaml.cs -->
     <Grid x:Name="RootGrid">
-        <Image Source="/Assets/annie-spratt-x-cEGE4dw8Q-unsplash.jpg" MaxWidth="640" />
-        <Border Width="480" Height="240" HorizontalAlignment="Left">
-            <Border.Background>
-                <!-- Need to set the FallbackColor on the brush for this to work with transparent window (Note: Not sure of actual proper brush to use here, just example) -->
-                <media:AcrylicBrush BlurAmount="15" TintColor="Black" TintOpacity="0.6"
-                                    FallbackColor="{ThemeResource ControlFillColorDefault}"/>
-            </Border.Background>
+        <!--
+            If you want to apply a shadow directly in your visual tree to an untemplated element
+            You need to at least have a layer of depth as seen in this next example.
+        -->
+        <!-- TODO: Make these based off the supplied width/height -->
+        <Border Width="896"
+                Height="192" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border CornerRadius="16">
+                <Border.Background>
+                    <!-- Need to set the FallbackColor on the brush for this to work with transparent window (Note: Not sure of actual proper brush to use here, just example) -->
+                    <media:AcrylicBrush BlurAmount="15" TintColor="Black" TintOpacity="0.6"
+                    FallbackColor="{ThemeResource ControlFillColorDefault}"/>
+                </Border.Background>
+                <TextBlock Text="Hello from fancy XAML!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <!--
+                We need to put the Shadow on a parent element here as otherwise the
+                rounding of the border of the image above clips the shadow itself.
+                This is easier to perform with the Composition only based shadow as the
+                Shadow is projected to another element.
+            -->
+            <ui:Effects.Shadow>
+                <media:AttachedCardShadow CornerRadius="16"
+                                      Offset="4,4" />
+            </ui:Effects.Shadow>
         </Border>
     </Grid>
 </winex:WindowEx>
