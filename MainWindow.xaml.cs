@@ -13,6 +13,7 @@ public sealed partial class MainWindow : WinUIEx.WindowEx
         InitializeComponent();
 
         var hwnd = this.GetWindowHandle();
+        // Comment ToggleWindowStyle out and see compositor works again
         HwndExtensions.ToggleWindowStyle(hwnd, false, WindowStyle.TiledWindow);
         HwndExtensions.CenterOnScreen(hwnd, 1024, 768);
     }

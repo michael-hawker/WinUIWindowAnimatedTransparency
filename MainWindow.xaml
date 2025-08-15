@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winex="using:WinUIEx"
+    xmlns:media="using:CommunityToolkit.WinUI.Media"
     mc:Ignorable="d"
     Title="WinUIExTransparent">
 
@@ -15,6 +16,11 @@
     </winex:WindowEx.SystemBackdrop>
 
     <Grid>
-        <Image Source="/Assets/annie-spratt-x-cEGE4dw8Q-unsplash.jpg" />
+        <Image Source="/Assets/annie-spratt-x-cEGE4dw8Q-unsplash.jpg" MaxWidth="640" />
+        <Border Width="480" Height="240" HorizontalAlignment="Left">
+            <Border.Background>
+                <media:AcrylicBrush BlurAmount="15" TintColor="Black" TintOpacity="0.6"/>
+            </Border.Background>
+        </Border>
     </Grid>
 </winex:WindowEx>
