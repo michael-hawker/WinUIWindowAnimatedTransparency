@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WinUIExTransparent (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WinUIExTransparent (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
