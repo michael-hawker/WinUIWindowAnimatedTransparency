@@ -10,14 +10,16 @@ namespace WinUIExTransparent;
 /// </summary>
 public sealed partial class MainWindow : WinUIEx.WindowEx
 {
-    public MainWindow(SoftwareBitmapSource desktopImageSource)
+    public MainWindow(int xpos, int ypos, int width, int height, SoftwareBitmapSource desktopImageSource)
     {
         InitializeComponent();
 
         var hwnd = this.GetWindowHandle();
         // Comment ToggleWindowStyle out and see compositor works again
         HwndExtensions.ToggleWindowStyle(hwnd, false, WindowStyle.TiledWindow);
-        HwndExtensions.CenterOnScreen(hwnd, 1024, 768);
+
+        // Move and resize window to specified location and size
+        AppWindow.MoveAndResize(new Windows.Graphics.RectInt32(xpos, ypos, width, height), Microsoft.UI.Windowing.DisplayArea.Primary);
 
         // Set Background of Window to Bitmap of Desktop to faux transparency
         RootGrid.Background = new ImageBrush()

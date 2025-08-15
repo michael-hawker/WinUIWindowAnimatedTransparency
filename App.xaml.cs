@@ -40,32 +40,34 @@ public partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
-        var desktopImageSource = await CaptureDesktopAsync();
+        // TODO: Not sure how DPI factors in here...
+        // Get width of primary display and calculate our window x coordinate
+        var xpos = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSCREEN) / 2 - WINDOW_WIDTH / 2;
+        var ypos = 0;
 
-        _window = new MainWindow(WINDOW_WIDTH, WINDOW_HEIGHT, desktopImageSource);
+        // Capture slice of the desktop background
+        var desktopImageSource = await CaptureDesktopAsync(xpos, ypos, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        _window = new MainWindow(xpos, ypos, WINDOW_WIDTH, WINDOW_HEIGHT, desktopImageSource);
         _window.Activate();
     }
 
-    public static async Task<SoftwareBitmapSource> CaptureDesktopAsync()
+    private static async Task<SoftwareBitmapSource> CaptureDesktopAsync(int xpos, int ypos, int width, int height)
     {
         // Get the device context of the entire screen
         var hScreenDC = PInvoke.GetDC(HWND.Null);
         var hMemoryDC = PInvoke.CreateCompatibleDC(hScreenDC);
 
-        // Get the width and height of the screen
-        int width = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXVIRTUALSCREEN);
-        int height = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYVIRTUALSCREEN);
-
-        // Create a compatible bitmap
+        // Create a compatible bitmap of the requested size (not the full screen)
         var hBitmap = PInvoke.CreateCompatibleBitmap(hScreenDC, width, height);
-        PInvoke.SelectObject(hMemoryDC, hBitmap);
+        var oldBitmap = PInvoke.SelectObject(hMemoryDC, hBitmap);
 
-        // Copy the screen into the bitmap
+        // Copy the specified region of the screen into the bitmap
         PInvoke.BitBlt(
             hMemoryDC,
-            0, 0, width, height,
+            0, 0, width, height, // destination pos and size (buffer)
             hScreenDC,
-            0, 0,
+            xpos, ypos,          // source position (on screen)
             ROP_CODE.SRCCOPY
         );
 
@@ -73,6 +75,7 @@ public partial class App : Application
         var softwareBitmapSource = await ConvertHBitmapToBitmapImage(hBitmap);
 
         // Cleanup
+        PInvoke.SelectObject(hMemoryDC, oldBitmap);
         PInvoke.DeleteDC(hMemoryDC);
         PInvoke.ReleaseDC(HWND.Null, hScreenDC);
         PInvoke.DeleteObject(hBitmap);
@@ -80,26 +83,27 @@ public partial class App : Application
         return softwareBitmapSource;
     }
 
-    public static async Task<SoftwareBitmapSource> ConvertHBitmapToBitmapImage(IntPtr hBitmap)
+    private static async Task<SoftwareBitmapSource> ConvertHBitmapToBitmapImage(HBITMAP hBitmap)
     {
-        // Step 1: Convert HBITMAP to byte array
+        // Convert HBITMAP to byte array
         var bitmap = Image.FromHbitmap(hBitmap);
         using var memoryStream = new MemoryStream();
         bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Bmp);
         byte[] imageBytes = memoryStream.ToArray();
 
-        // Step 2: Create a SoftwareBitmap
+        // Create a SoftwareBitmap
         using var stream = new InMemoryRandomAccessStream();
         await stream.WriteAsync(imageBytes.AsBuffer());
         stream.Seek(0);
 
+        // Ensure SoftwareBitmap is in the acceptable format for SoftwareBitmapSource
         var decoder = await BitmapDecoder.CreateAsync(stream);
         SoftwareBitmap softwareBitmap = await decoder.GetSoftwareBitmapAsync(
             BitmapPixelFormat.Bgra8,
             BitmapAlphaMode.Premultiplied
         );
 
-        // Step 3: Wrap in SoftwareBitmapSource exposable to XAML
+        // Wrap in SoftwareBitmapSource exposable to XAML
         var softwareBitmapSource = new SoftwareBitmapSource();
         await softwareBitmapSource.SetBitmapAsync(softwareBitmap);
 
