@@ -1,0 +1,10 @@
+﻿// Screen Capture APIs
+GetDC
+CreateCompatibleDC
+GetSystemMetrics
+CreateCompatibleBitmap
+SelectObject
+BitBlt
+ROP_CODE
+DeleteDC
+ReleaseDC

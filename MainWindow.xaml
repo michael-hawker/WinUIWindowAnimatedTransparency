@@ -11,11 +11,11 @@
     mc:Ignorable="d"
     Title="WinUIExTransparent">
 
-    <winex:WindowEx.SystemBackdrop>
+    <!--<winex:WindowEx.SystemBackdrop>
         <winex:TransparentTintBackdrop />
-    </winex:WindowEx.SystemBackdrop>
+    </winex:WindowEx.SystemBackdrop>-->
 
-    <Grid>
+    <Grid x:Name="RootGrid">
         <Image Source="/Assets/annie-spratt-x-cEGE4dw8Q-unsplash.jpg" MaxWidth="640" />
         <Border Width="480" Height="240" HorizontalAlignment="Left">
             <Border.Background>
