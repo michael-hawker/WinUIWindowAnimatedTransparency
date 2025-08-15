@@ -7,7 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:winex="using:WinUIEx"
-    xmlns:media="using:CommunityToolkit.WinUI.Media" xmlns:ui="using:CommunityToolkit.WinUI"
+    xmlns:media="using:CommunityToolkit.WinUI.Media" xmlns:ui="using:CommunityToolkit.WinUI" xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     mc:Ignorable="d"
     Title="WinUIExTransparent">
 
@@ -43,6 +43,12 @@
                 <media:AttachedCardShadow CornerRadius="16"
                                       Offset="4,4" />
             </ui:Effects.Shadow>
+
+            <!--Implicit show animations-->
+            <animations:Implicit.ShowAnimations>
+                <animations:TranslationAnimation Duration="0:0:1" From="0,-200,0" To="0"/>
+                <animations:OpacityAnimation Duration="0:0:1" From="0" To="1.0"/>
+            </animations:Implicit.ShowAnimations>
         </Border>
     </Grid>
 </winex:WindowEx>
