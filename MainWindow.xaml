@@ -11,9 +11,9 @@
     mc:Ignorable="d"
     Title="WinUIExTransparent">
 
-    <!--<winex:WindowEx.SystemBackdrop>
+    <winex:WindowEx.SystemBackdrop>
         <winex:TransparentTintBackdrop />
-    </winex:WindowEx.SystemBackdrop>-->
+    </winex:WindowEx.SystemBackdrop>
 
     <Grid x:Name="RootGrid">
         <Image Source="/Assets/annie-spratt-x-cEGE4dw8Q-unsplash.jpg" MaxWidth="640" />
